@@ -12,7 +12,7 @@ import stat
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import Callable, List, Optional, Tuple
 
 
 # 10 MB 按二进制单位计算，即 10 * 1024 * 1024 字节。
@@ -98,12 +98,17 @@ def get_scan_targets() -> List[Tuple[str, Path]]:
     ]
 
 
-def scan_directory(title: str, root: Path) -> ScanResult:
+def scan_directory(
+    title: str,
+    root: Path,
+    on_file: Optional[Callable[[Path, int], None]] = None,
+) -> ScanResult:
     """只读扫描目录，并返回总大小、文件数和大文件列表。
 
     这里使用 os.walk 逐层遍历目录，并明确关闭对符号链接目录的跟随，避免
     链接造成重复统计或目录循环。任何无法访问的条目都只会增加跳过计数，
-    不会让整个扫描任务中断。
+    不会让整个扫描任务中断。调用方可以通过 on_file 接收每个普通文件的
+    路径和大小，用于后续需要逐文件处理的场景。
     """
 
     result = ScanResult(title=title, path=root)
@@ -166,6 +171,9 @@ def scan_directory(title: str, root: Path) -> ScanResult:
                 file_size = file_info.st_size
                 result.total_size += file_size
                 result.file_count += 1
+
+                if on_file is not None:
+                    on_file(file_path, file_size)
 
                 # “超过 10MB”按严格大于处理；恰好 10MB 的文件不会入选。
                 if file_size <= MIN_LARGE_FILE_SIZE:
