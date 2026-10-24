@@ -1,4 +1,7 @@
 # C盘极速瘦身助手
+[![下载](https://img.shields.io/static/v1?label=&message=%F0%9F%93%A5%20%E4%B8%8B%E8%BD%BD%20v1.0.0%20%E6%AD%A3%E5%BC%8F%E7%89%88&color=2ea44f&style=for-the-badge&logo=github&logoColor=white)](https://github.com/Auraiiiii/C-Drive-Cleaner/releases/tag/v1.0.0)
+
+<sub>⚠️ 注意：Windows 可能会提示未知发布者，这是因为未购买代码签名证书，点击“更多信息”->“仍要运行”即可。</sub>
 
 > 面向 Windows 的只读磁盘空间分析工具，帮助用户快速了解临时目录与下载目录的空间占用。
 
